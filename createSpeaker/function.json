@@ -15,15 +15,6 @@
       "type": "http",
       "direction": "out",
       "name": "res"
-    },
-    {
-      "name": "speaker",
-      "type": "cosmosDB",
-      "databaseName": "acloudguru",
-      "collectionName": "speakers",
-      "createIfNotExists": false,
-      "connectionStringSetting": "Speakers_COSMOSDB",     
-      "direction": "out"
     }
   ]
 }

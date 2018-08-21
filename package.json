@@ -1,0 +1,22 @@
+{
+  "name": "course-introduction_to_serverless_on_azure",
+  "version": "1.0.0",
+  "description": "Introduction to Serverless on Azure Course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ACloudGuru-Resources/Course-Introduction_to_Serverless_on_Azure.git"
+  },
+  "author": "Dean Bryen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ACloudGuru-Resources/Course-Introduction_to_Serverless_on_Azure/issues"
+  },
+  "homepage": "https://github.com/ACloudGuru-Resources/Course-Introduction_to_Serverless_on_Azure#readme",
+  "dependencies": {
+    "mongodb": "^3.1.3"
+  }
+}
