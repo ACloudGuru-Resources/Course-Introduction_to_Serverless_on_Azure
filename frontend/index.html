@@ -1,0 +1,337 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Speaker App</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/2.2.1/vue-router.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+  <script src="constants.js"></script>
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap-theme.min.css">
+</head>
+<body>
+ 
+<div class="container">  
+  <header class="page-header">   
+    <div class="branding"> 
+      <img src="https://cdn.icon-icons.com/icons2/1415/PNG/512/ic-alerts_97640.png"  alt="Logo" title="Home page" class="logo"/>
+      <h1>Speaker App</h1>
+      <p>Find tech speakers for your events</a></p>
+    </div>
+  </header>
+  <main id="app"> 
+    <router-view></router-view>  
+  </main> 
+</div>
+ 
+<template id="speaker-list">
+  <div>
+    <div class="actions">
+      <router-link class="btn btn-default" v-bind:to="{path: '/add-speaker'}">
+        <span class="glyphicon glyphicon-plus"></span>
+        Add speaker 
+      </router-link>
+    </div> 
+      
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Title</th>
+        <th>Location</th>
+        <th>Skills</th>
+        <th class="col-sm-2">Actions</th>
+      </tr>
+      </thead> 
+      <tbody>
+      <tr v-for="speaker in speakers">
+        <td>
+          <router-link v-bind:to="{name: 'speaker', params: {speaker_id: speaker.id}}">{{ speaker.name }}</router-link>
+        </td>
+        <td>{{ speaker.title }}</td>
+        <td>
+          {{ speaker.location }}
+        </td>
+        <td>{{ speaker.skills}}</td> 
+        <td>
+          <router-link class="btn btn-warning btn-xs" v-bind:to="{name: 'speaker-edit', params: {speaker_id: speaker.id}}">Edit</router-link>
+          <router-link class="btn btn-danger btn-xs" v-bind:to="{name: 'speaker-delete', params: {speaker_id: speaker.id}}">Delete</router-link>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<template id="add-speaker">
+  <div>
+    <h2>Add new speaker</h2>
+    <form v-on:submit="createSpeaker">
+      <div class="form-group">
+        <label for="add-name">Name</label>
+        <input class="form-control" id="add-name" v-model="speaker.name" required/>
+      </div>
+      <div class="form-group">
+        <label for="add-title">Title</label>
+        <input class="form-control" id="add-title" v-model="speaker.title" required/>
+      </div>
+      <div class="form-group">
+        <label for="add-location">Location</label>
+        <input class="form-control" id="add-location" v-model="speaker.location" required/>
+      </div>      
+      <div class="form-group">
+        <label for="add-skills">Skills</label>
+        <input class="form-control" id="add-skills" v-model="speaker.skills" required/>
+      </div> 
+      <div class="form-group">
+        <label for="add-headshotUri">Link to Headshot</label>
+        <input class="form-control" id="add-headshotUri" v-model="speaker.headshotUri" required/>
+      </div>  
+      <button type="submit" class="btn btn-primary">Create</button>
+      <router-link class="btn btn-default" v-bind:to="'/'">Cancel</router-link>
+    </form>
+  </div>
+</template>
+ 
+<template id="speaker">
+  <div>
+    <h2>{{ speaker.name }}</h2>
+    <img v-bind:src="speaker.headshotUri" alt="Headshot" class="headshot"/>
+    <br/>
+    <b>Title: </b> 
+    <div>{{ speaker.title }}</div>
+    <b>Location:</b>  
+    <div>{{ speaker.location }}</div>
+     <b>Skills:</b> 
+    <div>{{ speaker.skills }}</div>
+    <br/> 
+    <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+    <router-link v-bind:to="'/'">Back to speaker list</router-link> 
+  </div>
+</template>
+
+<template id="speaker-edit">
+  <div>
+    <h2>Edit speaker</h2>
+    <form v-on:submit="updateSpeaker">
+      <div class="form-group">
+        <label for="edit-name">Name</label>
+        <input class="form-control" id="edit-name" v-model="speaker.name" required/>
+      </div>
+      <div class="form-group">
+        <label for="edit-title">Title</label>
+        <input class="form-control" id="edit-title" v-model="speaker.title" required/>
+      </div>
+      <div class="form-group">
+        <label for="edit-location">Location</label>
+        <input class="form-control" id="edit-location" v-model="speaker.location" required/>
+      </div>
+      <div class="form-group">
+        <label for="edit-skills">Skills</label>
+        <input class="form-control" id="edit-skills" v-model="speaker.skills" required/>
+      </div>
+      <div class="form-group">
+        <label for="edit-headshotUri">Link to Headshot</label>
+        <input class="form-control" id="edit-headshotUri" v-model="speaker.headshotUri" required/>
+      </div>
+      <button type="submit" class="btn btn-primary">Save</button>
+      <router-link class="btn btn-default" v-bind:to="'/'">Cancel</router-link>
+    </form>
+  </div>
+</template>
+
+<template id="speaker-delete">
+  <div>
+    <h2>Delete speaker: {{ speaker.name }}</h2>
+    <form v-on:submit="deleteSpeaker">
+      <p>The action cannot be undone.</p>
+      <button type="submit" class="btn btn-danger">Delete</button>
+      <router-link class="btn btn-default" v-bind:to="'/'">Cancel</router-link>
+    </form>
+  </div>
+</template>  
+ 
+</body>
+<script>
+//const API_URL = "https://acloudguru-serverless-intro-dev.azurewebsites.net"
+//const API_URL = "http://localhost:7071"
+
+var List = Vue.extend({
+  template: '#speaker-list',
+  data: function () {
+    return {
+      speakers : [] }
+  },
+  mounted() {
+    const url = `${API_URL}/api/getSpeakers/`;
+    axios.get(url) 
+    .then(response => {
+      // JSON responses are automatically parsed.
+      console.log(response.data)
+      this.speakers = response.data
+    })
+    .catch(e => {
+      console.log(e)
+    })
+  }
+  
+});
+
+var Speaker = Vue.extend({
+  template: '#speaker',
+  data: function () {
+    return {
+      speaker :  {}
+    }
+  },
+  created() {
+    const url = `${API_URL}/api/getSpeaker/?id=${this.$route.params.speaker_id}`
+    axios.get(url)
+    .then(response => {
+      // JSON responses are automatically parsed.
+      console.log(response.data)
+      this.speaker = response.data
+    })
+    .catch(e => {
+      this.errors.push(e)
+    })
+  }
+});
+
+var SpeakerEdit = Vue.extend({
+  template: '#speaker-edit',
+  data: function () {
+    return {
+      speaker :  {}
+    }
+  },
+  created() {
+    const url = `${API_URL}/api/getSpeaker/?id=${this.$route.params.speaker_id}`
+    axios.get(url)
+    .then(response => {
+      // JSON responses are automatically parsed.
+      console.log(response.data)
+      this.speaker = response.data
+    })
+    .catch(e => {
+      this.errors.push(e)
+    })
+  },
+  methods: {
+    updateSpeaker: function () {
+      var speaker = this.speaker;
+      console.log(speaker)
+      let params = {
+        id: speaker.id,
+        name: speaker.name,
+        title: speaker.title,
+        location: speaker.location,
+        skills: speaker.skills,
+        headshotUri: speaker.headshotUri
+      };
+      const url = `${API_URL}/api/updateSpeaker/?id=${speaker.id}`
+      router.push('/');
+      axios.put(url, params).then(function (response) {
+        router.push('/');
+    })
+      .catch(function (error) {
+       // handle error
+      console.log(error);
+   })
+    }
+  }
+});
+
+var SpeakerDelete = Vue.extend({
+  template: '#speaker-delete',
+  data: function () {
+    return {
+      speaker :  {}
+    }
+  },
+  created() {
+    const url = `${API_URL}/api/getSpeaker/?id=${this.$route.params.speaker_id}`
+    axios.get(url)
+    .then(response => {
+      // JSON responses are automatically parsed.
+      console.log(response.data)
+      this.speaker = response.data
+    })
+    .catch(e => {
+      this.errors.push(e)
+    })
+  },
+  methods: {
+    deleteSpeaker: function () {
+      const url = `${API_URL}/api/deleteSpeaker/?id=${this.$route.params.speaker_id}`
+      router.push('/');
+      return axios.delete(url, '')
+    }
+  }
+});
+
+var AddSpeaker = Vue.extend({
+  template: '#add-speaker',
+  data: function () {
+    return {speaker: {name: '', title: '', location: '', skills: '', headshotUri: ''}}
+  },
+  methods: {
+    createSpeaker: function() {
+      var speaker = this.speaker;
+      let params = {
+        id: parseInt(Math.random().toString().split('.')[1]),
+        name: speaker.name,
+        title: speaker.title,
+        location: speaker.location,
+        skills: speaker.skills,
+        headshotUri : speaker.headshotUri
+      }
+      const url = `${API_URL}/api/createSpeaker/`;
+      router.push('/');
+      return axios.post(url,params);
+    }
+  }
+});
+
+var router = new VueRouter({routes:[
+  { path: '/', component: List},
+  { path: '/speaker/:speaker_id', component: Speaker, name: 'speaker'},
+  { path: '/add-speaker', component: AddSpeaker},
+  { path: '/speaker/:speaker_id/edit', component: SpeakerEdit, name: 'speaker-edit'},
+  { path: '/speaker/:speaker_id/delete', component: SpeakerDelete, name: 'speaker-delete'}
+]});
+app = new Vue({
+  router:router
+}).$mount('#app')
+</script>
+<style>
+.logo {
+    width: 75px;
+    float: left;
+    margin-right: 15px;
+  }
+  
+  .headshot {
+    width: 150px;
+    height: 175px;
+    float: left;
+    margin-right: 15px;
+  } 
+  
+  .form-group {
+    max-width: 500px;
+  }
+  
+  .actions {
+    padding: 10px 0;
+  }
+  
+  .glyphicon-euro {
+    font-size: 12px;
+  }
+</style>
+</html>
