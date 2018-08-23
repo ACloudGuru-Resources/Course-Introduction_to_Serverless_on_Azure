@@ -1,16 +1,16 @@
-var mongo = require('mongodb').MongoClient;
-var ObjectID = require('mongodb').ObjectID;  
+const mongo = require('mongodb').MongoClient;
 
 module.exports = function (context, req) {
     context.log('deleteSpeaker function processing request');
-    if (req.body) {
+    if (req.query.id) {
+      //connect to CosmosDB
         mongo.connect(process.env.speakers_COSMOSDB, (err, client) => {
             let send = response(client, context);       
             if (err) send(500, err.message);     
             let db = client.db('acloudguru');    
-            let speakerId = req.query.id
+            let speakerId = parseInt(req.query.id)
             db.collection('speakers').deleteOne(
-                {_id: new ObjectID(speakerId) },
+                {id: speakerId },
               (err, result) => {
                 if (err) send(500, err.message);
         
@@ -26,7 +26,7 @@ module.exports = function (context, req) {
         }; 
     }
 }
-
+//Helper function to build the response
 function response(client, context) {
     return function(status, body) {
       context.res = {

@@ -1,11 +1,11 @@
-var mongo = require('mongodb').MongoClient;
+const mongo = require('mongodb').MongoClient;
 
 module.exports = function (context, req) {
     context.log('createSpeaker function processing request');
     context.log("req.body", req.body)
     if (req.body) {
         let speakerData = req.body;
-        
+        //connect to Mongo and list the items
         mongo.connect(process.env.speakers_COSMOSDB, (err, client) => {
             context.log(err)
             context.log(client)
@@ -30,6 +30,7 @@ module.exports = function (context, req) {
     }
 }
 
+//Helper function to build the response
 function response(client, context) {
     return function(status, body) {
       context.res = {
