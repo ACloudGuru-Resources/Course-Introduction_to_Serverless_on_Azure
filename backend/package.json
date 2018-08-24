@@ -17,6 +17,10 @@
   },
   "homepage": "https://github.com/ACloudGuru-Resources/Course-Introduction_to_Serverless_on_Azure#readme",
   "dependencies": {
-    "mongodb": "^3.1.3"
+    "axios": "^0.18.0",
+    "azure-eventgrid": "^1.2.1",
+    "mongodb": "^3.1.3",
+    "ms-rest-azure": "^2.5.7",
+    "uuid": "^3.3.2"
   }
 }
