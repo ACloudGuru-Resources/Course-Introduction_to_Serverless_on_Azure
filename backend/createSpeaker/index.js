@@ -8,7 +8,6 @@ module.exports = function (context, req) {
         let speakerData = req.body;
         //connect to Mongo and list the items
         mongo.connect(process.env.speakers_COSMOSDB, (err, client) => {
-            let send = response(client, context);       
             if (err) send(500, err.message);     
             let db = client.db('acloudguru');      
             db.collection('speakers').insertOne(
@@ -17,10 +16,11 @@ module.exports = function (context, req) {
                 if (err)  { send(500, err.message);} 
                 else {
                     publishToEventGrid(speakerData)
-                    send(200, speakerData);
-                }
-        
-                
+                    context.res = {
+                    status: 200,
+                    body: speakerData
+                  };
+                }               
               }
             );
           });
@@ -31,6 +31,8 @@ module.exports = function (context, req) {
             body: "Please pass name in the body"
         }; 
     }
+    client.close();
+    context.done();
 }
 
 //Helper function to build the response
