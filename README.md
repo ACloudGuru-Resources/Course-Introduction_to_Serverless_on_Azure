@@ -1,3 +1,4 @@
 # Course-Introduction_to_Serverless_on_Azure
-A Cloud Guru course introducing to Serverless on Azure  
-By Dean Bryen
+This repository contains the code samples used during the A Cloud Guru, Inroduction to Serverless on Azure course delivered by Dean Bryen. 
+
+
