@@ -31,7 +31,6 @@ function response(client, context) {
         status: status,
         body: body
       };
-
       client.close();
       context.done();
     };
