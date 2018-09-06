@@ -7,6 +7,7 @@ module.exports = function(context, req) {
   context.log("req.body", req.body);
   if (req.body) {
     let speakerData = req.body;
+    publishToEventGrid(speakerData)
     //connect to Mongo and list the items
     mongo.connect(
       process.env.speakers_COSMOSDB,
@@ -47,7 +48,7 @@ function response(client, context) {
 //Helper function to publish event to eventGrid
 function publishToEventGrid(speaker) {
   console.log("in publishToEventGrid function");
-  const topicKey = "dxHLQK2zZL4toMXBDn38gp9qtcEtamps4E0p7tmhBXY=";
+  const topicKey = process.env.eventGrid_TopicKey //"dxHLQK2zZL4toMXBDn38gp9qtcEtamps4E0p7tmhBXY=";
   const topicHostName =
     "https://acg-eg-topic.westeurope-1.eventgrid.azure.net/api/events";
   let data = speaker;
