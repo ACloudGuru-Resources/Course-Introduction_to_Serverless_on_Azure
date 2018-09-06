@@ -48,7 +48,7 @@ function response(client, context) {
 //Helper function to publish event to eventGrid
 function publishToEventGrid(speaker) {
   console.log("in publishToEventGrid function");
-  const topicKey = process.env.eventGrid_TopicKey //"dxHLQK2zZL4toMXBDn38gp9qtcEtamps4E0p7tmhBXY=";
+  const topicKey = process.env.eventGrid_TopicKey
   const topicHostName =
     "https://acg-eg-topic.westeurope-1.eventgrid.azure.net/api/events";
   let data = speaker;
