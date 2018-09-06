@@ -59,7 +59,7 @@ function publishToEventGrid(speaker) {
       dataVersion: "1.0",
       eventType: "Microsoft.MockPublisher.TestEvent",
       eventTime: new Date(),
-      data: speaker.ops
+      data: speaker
     }
   ];
   console.log("Here is the event data: ", events[0].data);
